@@ -1,16 +1,36 @@
 
+####################################################
 -> todas os artigos de determinado reporter
-
--> todos os artigos de entre 2019-2020
-
--> o reporter com mais artigos em 2020 
-
--> artigos que contenham a palvra "python"
+ Article.objects.all().filter(reporter_id=7)
+ <QuerySet [<Article: Teste Article>]
+####################################################
+->* todos os artigos de entre 2019-2020
+####################################################
+# Article.objects.all().filter(pub_date__year='2020') | Article.objects.all().filter(pub_date__year='2019')
+#<QuerySet [<Article: Teste Article>, <Article: bluphy>, <Article: python>]>
+####################################################
+******-> o reporter com mais artigos em 2020 
+a= Reporter.objects.filter(article__pub_date__year='2020').annotate(num_articles=Count('article'))
+.order_by('-num_articles')[0]
+a
+<Reporter: fabricio rodrigues>
+####################################################
+-> *artigos que contenham a palvra "python"
  e tenham sido publicados 
-por determinado reporter em abril de 2015
-
--> A quantidade de publicacoes que tenham 
+por determinado reporter em julho de 2019
+####################################################
+# Article.objects.filter(headline__contains='Python') & Article.objects.filter(reporter_id=2) & Article.objects.filter(pub_date__contains='2019-07')
+<QuerySet [<Article: python>]>
+####################################################
+-> *A quantidade de publicacoes que tenham 
 a letra "i"
+####################################################
+# Publication.objects.filter(title__icontains='i')
+<QuerySet [<Publication: Science News>, <Publication: Science Weekly>, <Publication: rogeriao>]>
+####################################################
 
--> A media de publicacoes por artigos
-
+**********#-> A media de publicacoes por artigos
+f = Article.objects.annotate(a =Count('publications')).aggregate(Avg('a'))
+>>> f
+{'a__avg': 0.14285714285714285}
+####################################################
